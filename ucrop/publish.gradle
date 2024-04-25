@@ -30,12 +30,12 @@ publishing {
             pom {
                 name = PUBLISH_ARTIFACT_ID
                 description = 'Image Cropping + Editing Library for Android'
-                url = 'https://github.com/jens-muenker/uCrop-n-Edit'
+                url = 'https://github.com/dwikyhardi/CropMaster'
 
                 licenses {
                     license {
                         name = 'uCrop\'n\'Edit License'
-                        url = 'https://github.com/jens-muenker/uCrop-n-Edit'
+                        url = 'https://github.com/dwikyhardi/CropMaster'
                     }
                 }
 
@@ -47,9 +47,9 @@ publishing {
                 }
 
                 scm {
-                    connection = 'scm:git:github.com/jens-muenker/uCrop-n-Edit.git'
-                    developerConnection = 'scm:git:ssh://github.com/jens-muenker/uCrop-n-Edit.git'
-                    url = 'https://github.com/jens-muenker/uCrop-n-Edit/tree/master'
+                    connection = 'scm:git:github.com/dwikyhardi/CropMaster.git'
+                    developerConnection = 'scm:git:ssh://github.com/dwikyhardi/CropMaster.git'
+                    url = 'https://github.com/dwikyhardi/CropMaster/tree/master'
                 }
             }
         }

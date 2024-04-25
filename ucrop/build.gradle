@@ -2,25 +2,25 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 ext {
-    PUBLISH_GROUP_ID = 'com.github.jens-muenker'
-    PUBLISH_VERSION = '3.0.6'
-    PUBLISH_ARTIFACT_ID = 'ucropnedit'
+    PUBLISH_GROUP_ID = 'com.github.dwikyhardi'
+    PUBLISH_VERSION = '1.0.0'
+    PUBLISH_ARTIFACT_ID = 'cropmaster'
 }
 
 android {
     compileSdk 34
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdk 34
 
         vectorDrawables.useSupportLibrary = true
 
-        renderscriptTargetApi 18
+        renderscriptTargetApi 21
         renderscriptSupportModeEnabled true
 
         aarMetadata {
-            minCompileSdk = 14
+            minCompileSdk = 21
         }
     }
     buildTypes {
@@ -31,8 +31,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_21
-        targetCompatibility JavaVersion.VERSION_21
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions{
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     resourcePrefix 'ucrop_'
@@ -51,7 +55,7 @@ java {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.22'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.23'
     implementation "androidx.appcompat:appcompat:1.6.1"
     implementation 'androidx.exifinterface:exifinterface:1.3.7'
     implementation "androidx.transition:transition:1.4.1"
