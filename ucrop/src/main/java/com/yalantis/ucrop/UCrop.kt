@@ -22,11 +22,10 @@ import java.util.Locale
  * Builder class to ease Intent setup.
  */
 class UCrop private constructor(source: Uri, destination: Uri) {
-    private val mCropIntent: Intent
+    private val mCropIntent: Intent = Intent()
     private var mCropOptionsBundle: Bundle
 
     init {
-        mCropIntent = Intent()
         mCropOptionsBundle = Bundle()
         mCropOptionsBundle.putParcelable(EXTRA_INPUT_URI, source)
         mCropOptionsBundle.putParcelable(EXTRA_OUTPUT_URI, destination)
@@ -62,19 +61,19 @@ class UCrop private constructor(source: Uri, destination: Uri) {
      * @param height max cropped image height
      */
     fun withMaxResultSize(
-        @IntRange(from = MIN_SIZE.toLong()) width: Int,
-        @IntRange(from = MIN_SIZE.toLong()) height: Int
+            @IntRange(from = MIN_SIZE.toLong()) width: Int,
+            @IntRange(from = MIN_SIZE.toLong()) height: Int
     ): UCrop {
-        var width = width
-        var height = height
-        if (width < MIN_SIZE) {
-            width = MIN_SIZE
+        var fWidth = width
+        var fHeight = height
+        if (fWidth < MIN_SIZE) {
+            fWidth = MIN_SIZE
         }
-        if (height < MIN_SIZE) {
-            height = MIN_SIZE
+        if (fHeight < MIN_SIZE) {
+            fHeight = MIN_SIZE
         }
-        mCropOptionsBundle.putInt(EXTRA_MAX_SIZE_X, width)
-        mCropOptionsBundle.putInt(EXTRA_MAX_SIZE_Y, height)
+        mCropOptionsBundle.putInt(EXTRA_MAX_SIZE_X, fWidth)
+        mCropOptionsBundle.putInt(EXTRA_MAX_SIZE_Y, fHeight)
         return this
     }
 
@@ -118,7 +117,7 @@ class UCrop private constructor(source: Uri, destination: Uri) {
      *
      * @return Intent for [UCropActivity]
      */
-    fun getIntent(context: Context, extra: Bundle): Intent {
+    private fun getIntent(context: Context, extra: Bundle): Intent {
         mCropIntent.setClass(context, UCropActivity::class.java)
         mCropIntent.putExtras(mCropOptionsBundle)
         mCropIntent.putExtra("EXTRA-BUNDLE", extra)
@@ -130,7 +129,7 @@ class UCrop private constructor(source: Uri, destination: Uri) {
      *
      * @return Fragment of [UCropFragment]
      */
-    val fragment: UCropFragment
+    private val fragment: UCropFragment
         get() = UCropFragment.newInstance(mCropOptionsBundle)
 
     fun getFragment(bundle: Bundle): UCropFragment {
@@ -143,11 +142,7 @@ class UCrop private constructor(source: Uri, destination: Uri) {
      * Use it with method [.withOptions]
      */
     class Options {
-        val optionBundle: Bundle
-
-        init {
-            optionBundle = Bundle()
-        }
+        val optionBundle: Bundle = Bundle()
 
         /**
          * Set one of [android.graphics.Bitmap.CompressFormat] that will be used to save resulting Bitmap.
@@ -167,13 +162,13 @@ class UCrop private constructor(source: Uri, destination: Uri) {
          * Choose what set of gestures will be enabled on each tab - if any.
          */
         fun setAllowedGestures(
-            @UCropActivity.GestureTypes tabScale: Int,
-            @UCropActivity.GestureTypes tabRotate: Int,
-            @UCropActivity.GestureTypes tabAspectRatio: Int
+                @UCropActivity.GestureTypes tabScale: Int,
+                @UCropActivity.GestureTypes tabRotate: Int,
+                @UCropActivity.GestureTypes tabAspectRatio: Int
         ) {
             optionBundle.putIntArray(
-                EXTRA_ALLOWED_GESTURES,
-                intArrayOf(tabScale, tabRotate, tabAspectRatio)
+                    EXTRA_ALLOWED_GESTURES,
+                    intArrayOf(tabScale, tabRotate, tabAspectRatio)
             )
         }
 
@@ -183,10 +178,10 @@ class UCrop private constructor(source: Uri, destination: Uri) {
          * @param maxScaleMultiplier - (minScale * maxScaleMultiplier) = maxScale
          */
         fun setMaxScaleMultiplier(
-            @FloatRange(
-                from = 1.0,
-                fromInclusive = false
-            ) maxScaleMultiplier: Float
+                @FloatRange(
+                        from = 1.0,
+                        fromInclusive = false
+                ) maxScaleMultiplier: Float
         ) {
             optionBundle.putFloat(EXTRA_MAX_SCALE_MULTIPLIER, maxScaleMultiplier)
         }
@@ -380,16 +375,16 @@ class UCrop private constructor(source: Uri, destination: Uri) {
         fun setAspectRatioOptions(selectedByDefault: Int, vararg aspectRatio: AspectRatio?) {
             require(selectedByDefault < aspectRatio.size) {
                 String.format(
-                    Locale.US,
-                    "Index [selectedByDefault = %d] (0-based) cannot be higher or equal than aspect ratio options count [count = %d].",
-                    selectedByDefault, aspectRatio.size
+                        Locale.US,
+                        "Index [selectedByDefault = %d] (0-based) cannot be higher or equal than aspect ratio options count [count = %d].",
+                        selectedByDefault, aspectRatio.size
                 )
             }
             optionBundle.putInt(EXTRA_ASPECT_RATIO_SELECTED_BY_DEFAULT, selectedByDefault)
             optionBundle.putParcelableArrayList(
-                EXTRA_ASPECT_RATIO_OPTIONS, ArrayList<Parcelable>(
+                    EXTRA_ASPECT_RATIO_OPTIONS, ArrayList<Parcelable>(
                     Arrays.asList(*aspectRatio)
-                )
+            )
             )
         }
 
@@ -428,8 +423,8 @@ class UCrop private constructor(source: Uri, destination: Uri) {
          * @param height max cropped image height
          */
         fun withMaxResultSize(
-            @IntRange(from = MIN_SIZE.toLong()) width: Int,
-            @IntRange(from = MIN_SIZE.toLong()) height: Int
+                @IntRange(from = MIN_SIZE.toLong()) width: Int,
+                @IntRange(from = MIN_SIZE.toLong()) height: Int
         ) {
             optionBundle.putInt(EXTRA_MAX_SIZE_X, width)
             optionBundle.putInt(EXTRA_MAX_SIZE_Y, height)
@@ -464,47 +459,47 @@ class UCrop private constructor(source: Uri, destination: Uri) {
         }
 
         companion object {
-            const val EXTRA_COMPRESSION_FORMAT_NAME = EXTRA_PREFIX + ".CompressionFormatName"
-            const val EXTRA_COMPRESSION_QUALITY = EXTRA_PREFIX + ".CompressionQuality"
-            const val EXTRA_ALLOWED_GESTURES = EXTRA_PREFIX + ".AllowedGestures"
-            const val EXTRA_MAX_BITMAP_SIZE = EXTRA_PREFIX + ".MaxBitmapSize"
-            const val EXTRA_MAX_SCALE_MULTIPLIER = EXTRA_PREFIX + ".MaxScaleMultiplier"
+            const val EXTRA_COMPRESSION_FORMAT_NAME = "$EXTRA_PREFIX.CompressionFormatName"
+            const val EXTRA_COMPRESSION_QUALITY = "$EXTRA_PREFIX.CompressionQuality"
+            const val EXTRA_ALLOWED_GESTURES = "$EXTRA_PREFIX.AllowedGestures"
+            const val EXTRA_MAX_BITMAP_SIZE = "$EXTRA_PREFIX.MaxBitmapSize"
+            const val EXTRA_MAX_SCALE_MULTIPLIER = "$EXTRA_PREFIX.MaxScaleMultiplier"
             const val EXTRA_IMAGE_TO_CROP_BOUNDS_ANIM_DURATION =
-                EXTRA_PREFIX + ".ImageToCropBoundsAnimDuration"
-            const val EXTRA_DIMMED_LAYER_COLOR = EXTRA_PREFIX + ".DimmedLayerColor"
-            const val EXTRA_CIRCLE_DIMMED_LAYER = EXTRA_PREFIX + ".CircleDimmedLayer"
-            const val EXTRA_SHOW_CROP_FRAME = EXTRA_PREFIX + ".ShowCropFrame"
-            const val EXTRA_CROP_FRAME_COLOR = EXTRA_PREFIX + ".CropFrameColor"
-            const val EXTRA_CROP_FRAME_STROKE_WIDTH = EXTRA_PREFIX + ".CropFrameStrokeWidth"
-            const val EXTRA_SHOW_CROP_GRID = EXTRA_PREFIX + ".ShowCropGrid"
-            const val EXTRA_CROP_GRID_ROW_COUNT = EXTRA_PREFIX + ".CropGridRowCount"
-            const val EXTRA_CROP_GRID_COLUMN_COUNT = EXTRA_PREFIX + ".CropGridColumnCount"
-            const val EXTRA_CROP_GRID_COLOR = EXTRA_PREFIX + ".CropGridColor"
-            const val EXTRA_CROP_GRID_CORNER_COLOR = EXTRA_PREFIX + ".CropGridCornerColor"
-            const val EXTRA_CROP_GRID_STROKE_WIDTH = EXTRA_PREFIX + ".CropGridStrokeWidth"
-            const val EXTRA_TOOL_BAR_COLOR = EXTRA_PREFIX + ".ToolbarColor"
-            const val EXTRA_STATUS_BAR_COLOR = EXTRA_PREFIX + ".StatusBarColor"
+                    "$EXTRA_PREFIX.ImageToCropBoundsAnimDuration"
+            const val EXTRA_DIMMED_LAYER_COLOR = "$EXTRA_PREFIX.DimmedLayerColor"
+            const val EXTRA_CIRCLE_DIMMED_LAYER = "$EXTRA_PREFIX.CircleDimmedLayer"
+            const val EXTRA_SHOW_CROP_FRAME = "$EXTRA_PREFIX.ShowCropFrame"
+            const val EXTRA_CROP_FRAME_COLOR = "$EXTRA_PREFIX.CropFrameColor"
+            const val EXTRA_CROP_FRAME_STROKE_WIDTH = "$EXTRA_PREFIX.CropFrameStrokeWidth"
+            const val EXTRA_SHOW_CROP_GRID = "$EXTRA_PREFIX.ShowCropGrid"
+            const val EXTRA_CROP_GRID_ROW_COUNT = "$EXTRA_PREFIX.CropGridRowCount"
+            const val EXTRA_CROP_GRID_COLUMN_COUNT = "$EXTRA_PREFIX.CropGridColumnCount"
+            const val EXTRA_CROP_GRID_COLOR = "$EXTRA_PREFIX.CropGridColor"
+            const val EXTRA_CROP_GRID_CORNER_COLOR = "$EXTRA_PREFIX.CropGridCornerColor"
+            const val EXTRA_CROP_GRID_STROKE_WIDTH = "$EXTRA_PREFIX.CropGridStrokeWidth"
+            const val EXTRA_TOOL_BAR_COLOR = "$EXTRA_PREFIX.ToolbarColor"
+            const val EXTRA_STATUS_BAR_COLOR = "$EXTRA_PREFIX.StatusBarColor"
             const val EXTRA_UCROP_COLOR_CONTROLS_WIDGET_ACTIVE =
-                EXTRA_PREFIX + ".UcropColorControlsWidgetActive"
-            const val EXTRA_UCROP_WIDGET_COLOR_TOOLBAR = EXTRA_PREFIX + ".UcropToolbarWidgetColor"
+                    "$EXTRA_PREFIX.UcropColorControlsWidgetActive"
+            const val EXTRA_UCROP_WIDGET_COLOR_TOOLBAR = "$EXTRA_PREFIX.UcropToolbarWidgetColor"
             const val EXTRA_UCROP_TITLE_GRAVITY_TOOLBAR = "$EXTRA_PREFIX.UcropToolbarTitleGravity"
             const val EXTRA_UCROP_TITLE_SIZE_TOOLBAR = "$EXTRA_PREFIX.UcropToolbarTitleSize"
-            const val EXTRA_UCROP_TITLE_TEXT_TOOLBAR = EXTRA_PREFIX + ".UcropToolbarTitleText"
+            const val EXTRA_UCROP_TITLE_TEXT_TOOLBAR = "$EXTRA_PREFIX.UcropToolbarTitleText"
             const val EXTRA_UCROP_WIDGET_CANCEL_DRAWABLE =
-                EXTRA_PREFIX + ".UcropToolbarCancelDrawable"
-            const val EXTRA_UCROP_WIDGET_CROP_DRAWABLE = EXTRA_PREFIX + ".UcropToolbarCropDrawable"
-            const val EXTRA_UCROP_LOGO_COLOR = EXTRA_PREFIX + ".UcropLogoColor"
-            const val EXTRA_HIDE_BOTTOM_CONTROLS = EXTRA_PREFIX + ".HideBottomControls"
-            const val EXTRA_FREE_STYLE_CROP = EXTRA_PREFIX + ".FreeStyleCrop"
+                    "$EXTRA_PREFIX.UcropToolbarCancelDrawable"
+            const val EXTRA_UCROP_WIDGET_CROP_DRAWABLE = "$EXTRA_PREFIX.UcropToolbarCropDrawable"
+            const val EXTRA_UCROP_LOGO_COLOR = "$EXTRA_PREFIX.UcropLogoColor"
+            const val EXTRA_HIDE_BOTTOM_CONTROLS = "$EXTRA_PREFIX.HideBottomControls"
+            const val EXTRA_FREE_STYLE_CROP = "$EXTRA_PREFIX.FreeStyleCrop"
             const val EXTRA_ASPECT_RATIO_SELECTED_BY_DEFAULT =
-                EXTRA_PREFIX + ".AspectRatioSelectedByDefault"
-            const val EXTRA_ASPECT_RATIO_OPTIONS = EXTRA_PREFIX + ".AspectRatioOptions"
+                    "$EXTRA_PREFIX.AspectRatioSelectedByDefault"
+            const val EXTRA_ASPECT_RATIO_OPTIONS = "$EXTRA_PREFIX.AspectRatioOptions"
             const val EXTRA_UCROP_ROOT_VIEW_BACKGROUND_COLOR =
-                EXTRA_PREFIX + ".UcropRootViewBackgroundColor"
-            const val EXTRA_BRIGHTNESS = EXTRA_PREFIX + ".Brightness"
-            const val EXTRA_CONTRAST = EXTRA_PREFIX + ".Contrast"
-            const val EXTRA_SATURATION = EXTRA_PREFIX + ".Saturation"
-            const val EXTRA_SHARPNESS = EXTRA_PREFIX + ".Sharpness"
+                    "$EXTRA_PREFIX.UcropRootViewBackgroundColor"
+            const val EXTRA_BRIGHTNESS = "$EXTRA_PREFIX.Brightness"
+            const val EXTRA_CONTRAST = "$EXTRA_PREFIX.Contrast"
+            const val EXTRA_SATURATION = "$EXTRA_PREFIX.Saturation"
+            const val EXTRA_SHARPNESS = "$EXTRA_PREFIX.Sharpness"
         }
     }
 
@@ -513,18 +508,18 @@ class UCrop private constructor(source: Uri, destination: Uri) {
         const val RESULT_ERROR = 96
         const val MIN_SIZE = 10
         private const val EXTRA_PREFIX = "com.yalantis.ucrop" //BuildConfig.APPLICATION_ID;
-        const val EXTRA_INPUT_URI = EXTRA_PREFIX + ".InputUri"
-        const val EXTRA_OUTPUT_URI = EXTRA_PREFIX + ".OutputUri"
-        const val EXTRA_OUTPUT_CROP_ASPECT_RATIO = EXTRA_PREFIX + ".CropAspectRatio"
-        const val EXTRA_OUTPUT_IMAGE_WIDTH = EXTRA_PREFIX + ".ImageWidth"
-        const val EXTRA_OUTPUT_IMAGE_HEIGHT = EXTRA_PREFIX + ".ImageHeight"
-        const val EXTRA_OUTPUT_OFFSET_X = EXTRA_PREFIX + ".OffsetX"
-        const val EXTRA_OUTPUT_OFFSET_Y = EXTRA_PREFIX + ".OffsetY"
-        const val EXTRA_ERROR = EXTRA_PREFIX + ".Error"
-        const val EXTRA_ASPECT_RATIO_X = EXTRA_PREFIX + ".AspectRatioX"
-        const val EXTRA_ASPECT_RATIO_Y = EXTRA_PREFIX + ".AspectRatioY"
-        const val EXTRA_MAX_SIZE_X = EXTRA_PREFIX + ".MaxSizeX"
-        const val EXTRA_MAX_SIZE_Y = EXTRA_PREFIX + ".MaxSizeY"
+        const val EXTRA_INPUT_URI = "$EXTRA_PREFIX.InputUri"
+        const val EXTRA_OUTPUT_URI = "$EXTRA_PREFIX.OutputUri"
+        const val EXTRA_OUTPUT_CROP_ASPECT_RATIO = "$EXTRA_PREFIX.CropAspectRatio"
+        const val EXTRA_OUTPUT_IMAGE_WIDTH = "$EXTRA_PREFIX.ImageWidth"
+        const val EXTRA_OUTPUT_IMAGE_HEIGHT = "$EXTRA_PREFIX.ImageHeight"
+        const val EXTRA_OUTPUT_OFFSET_X = "$EXTRA_PREFIX.OffsetX"
+        const val EXTRA_OUTPUT_OFFSET_Y = "$EXTRA_PREFIX.OffsetY"
+        const val EXTRA_ERROR = "$EXTRA_PREFIX.Error"
+        const val EXTRA_ASPECT_RATIO_X = "$EXTRA_PREFIX.AspectRatioX"
+        const val EXTRA_ASPECT_RATIO_Y = "$EXTRA_PREFIX.AspectRatioY"
+        const val EXTRA_MAX_SIZE_X = "$EXTRA_PREFIX.MaxSizeX"
+        const val EXTRA_MAX_SIZE_Y = "$EXTRA_PREFIX.MaxSizeY"
 
         /**
          * This method creates new Intent builder and sets both source and destination image URIs.
