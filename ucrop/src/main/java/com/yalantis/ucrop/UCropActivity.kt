@@ -153,14 +153,25 @@ class UCropActivity : AppCompatActivity() {
         val menuItemCrop = menu.findItem(R.id.menu_crop)
         val menuItemCropIcon = ContextCompat.getDrawable(this, mToolbarCropDrawable)
         if (menuItemCropIcon != null) {
-            menuItemCropIcon.mutate()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                menuItemCropIcon.colorFilter = BlendModeColorFilter(mToolbarWidgetColor, BlendMode.SRC_ATOP)
-            } else {
-                @Suppress("DEPRECATION")
-                menuItemCropIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP)
+            try {
+                menuItemCropIcon.mutate()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    menuItemCropIcon.colorFilter = BlendModeColorFilter(mToolbarWidgetColor, BlendMode.SRC_ATOP)
+                } else {
+                    @Suppress("DEPRECATION")
+                    menuItemCropIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP)
+                }
+                menuItemCrop.icon = menuItemCropIcon
+            } catch (e: IllegalStateException) {
+                Log.i(
+                        TAG,
+                        String.format(
+                                "%s - %s",
+                                e.message,
+                                getString(R.string.ucrop_mutate_exception_hint)
+                        )
+                )
             }
-            menuItemCrop.icon = menuItemCropIcon
         }
         return true
     }
