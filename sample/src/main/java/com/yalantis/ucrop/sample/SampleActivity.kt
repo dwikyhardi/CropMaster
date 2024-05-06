@@ -52,7 +52,7 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
     private var settingsView: ScrollView? = null
     private val requestMode = BuildConfig.RequestMode
     private var fragment: UCropFragment? = null
-    private var mShowLoader = false
+//    private var mShowLoader = false
     private var mToolbarTitle: String? = null
 
     @DrawableRes
@@ -373,8 +373,8 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
     }
 
     override fun loadingProgress(showLoader: Boolean) {
-        mShowLoader = showLoader
-        supportInvalidateOptionsMenu()
+//        mShowLoader = showLoader
+//        supportInvalidateOptionsMenu()
     }
 
     override fun onCropFinish(result: UCropResult?) {
@@ -474,25 +474,25 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
         menuInflater.inflate(R.menu.ucrop_menu_activity, menu)
 
         // Change crop & loader menu icons color to match the rest of the UI colors
-        val menuItemLoader = menu.findItem(R.id.menu_loader)
-        val menuItemLoaderIcon = menuItemLoader.icon
-        if (menuItemLoaderIcon != null) {
-            try {
-                menuItemLoaderIcon.mutate()
-                menuItemLoaderIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP)
-                menuItemLoader.icon = menuItemLoaderIcon
-            } catch (e: IllegalStateException) {
-                Log.i(
-                    this.javaClass.name,
-                    String.format(
-                        "%s - %s",
-                        e.message,
-                        getString(R.string.ucrop_mutate_exception_hint)
-                    )
-                )
-            }
-            (menuItemLoader.icon as Animatable?)!!.start()
-        }
+//        val menuItemLoader = menu.findItem(R.id.menu_loader)
+//        val menuItemLoaderIcon = menuItemLoader.icon
+//        if (menuItemLoaderIcon != null) {
+//            try {
+//                menuItemLoaderIcon.mutate()
+//                menuItemLoaderIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP)
+//                menuItemLoader.icon = menuItemLoaderIcon
+//            } catch (e: IllegalStateException) {
+//                Log.i(
+//                    this.javaClass.name,
+//                    String.format(
+//                        "%s - %s",
+//                        e.message,
+//                        getString(R.string.ucrop_mutate_exception_hint)
+//                    )
+//                )
+//            }
+//            (menuItemLoader.icon as Animatable?)!!.start()
+//        }
         val menuItemCrop = menu.findItem(R.id.menu_crop)
         val menuItemCropIcon = ContextCompat.getDrawable(
             this,
@@ -507,8 +507,9 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.menu_crop).isVisible = !mShowLoader
-        menu.findItem(R.id.menu_loader).isVisible = mShowLoader
+        menu.findItem(R.id.menu_crop).isVisible = true
+//        menu.findItem(R.id.menu_crop).isVisible = !mShowLoader
+//        menu.findItem(R.id.menu_loader).isVisible = mShowLoader
         return super.onPrepareOptionsMenu(menu)
     }
 

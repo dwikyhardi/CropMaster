@@ -80,7 +80,7 @@ class UCropActivity : AppCompatActivity() {
     private var mToolbarCropDrawable = 0
     private var mLogoColor = 0
     private var mShowBottomControls = false
-    private var mShowLoader = true
+//    private var mShowLoader = true
     private var mUCropView: UCropView? = null
     private var mToolbarTextView: TextView? = null
     private var mToolbarView: Toolbar? = null
@@ -125,31 +125,31 @@ class UCropActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.ucrop_menu_activity, menu)
 
-        // Change crop & loader menu icons color to match the rest of the UI colors
-        val menuItemLoader = menu.findItem(R.id.menu_loader)
-        val menuItemLoaderIcon = menuItemLoader.icon
-        if (menuItemLoaderIcon != null) {
-            try {
-                menuItemLoaderIcon.mutate()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    menuItemLoaderIcon.colorFilter = BlendModeColorFilter(mToolbarWidgetColor, BlendMode.SRC_ATOP)
-                } else {
-                    @Suppress("DEPRECATION")
-                    menuItemLoaderIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP)
-                }
-                menuItemLoader.icon = menuItemLoaderIcon
-            } catch (e: IllegalStateException) {
-                Log.i(
-                        TAG,
-                        String.format(
-                                "%s - %s",
-                                e.message,
-                                getString(R.string.ucrop_mutate_exception_hint)
-                        )
-                )
-            }
-            (menuItemLoader.icon as Animatable?)?.start()
-        }
+//        // Change crop & loader menu icons color to match the rest of the UI colors
+//        val menuItemLoader = menu.findItem(R.id.menu_loader)
+//        val menuItemLoaderIcon = menuItemLoader.icon
+//        if (menuItemLoaderIcon != null) {
+//            try {
+//                menuItemLoaderIcon.mutate()
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                    menuItemLoaderIcon.colorFilter = BlendModeColorFilter(mToolbarWidgetColor, BlendMode.SRC_ATOP)
+//                } else {
+//                    @Suppress("DEPRECATION")
+//                    menuItemLoaderIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP)
+//                }
+//                menuItemLoader.icon = menuItemLoaderIcon
+//            } catch (e: IllegalStateException) {
+//                Log.i(
+//                        TAG,
+//                        String.format(
+//                                "%s - %s",
+//                                e.message,
+//                                getString(R.string.ucrop_mutate_exception_hint)
+//                        )
+//                )
+//            }
+//            (menuItemLoader.icon as Animatable?)?.start()
+//        }
         val menuItemCrop = menu.findItem(R.id.menu_crop)
         val menuItemCropIcon = ContextCompat.getDrawable(this, mToolbarCropDrawable)
         if (menuItemCropIcon != null) {
@@ -177,8 +177,9 @@ class UCropActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.menu_crop).isVisible = !mShowLoader
-        menu.findItem(R.id.menu_loader).isVisible = mShowLoader
+        menu.findItem(R.id.menu_crop).isVisible = true
+//        menu.findItem(R.id.menu_crop).isVisible = !mShowLoader
+//        menu.findItem(R.id.menu_loader).isVisible = mShowLoader
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -559,8 +560,8 @@ class UCropActivity : AppCompatActivity() {
             if (mBlockingView != null) {
                 mBlockingView!!.isClickable = false
             }
-            mShowLoader = false
-            supportInvalidateOptionsMenu()
+//            mShowLoader = false
+//            supportInvalidateOptionsMenu()
         }
 
         override fun onLoadFailure(e: Exception) {
@@ -1015,8 +1016,8 @@ class UCropActivity : AppCompatActivity() {
 
     private fun cropAndSaveImage() {
         mBlockingView?.isClickable = true
-        mShowLoader = true
-        supportInvalidateOptionsMenu()
+//        mShowLoader = true
+//        supportInvalidateOptionsMenu()
         mGestureCropImageView?.cropAndSaveImage(
                 mCompressFormat,
                 mCompressQuality,
