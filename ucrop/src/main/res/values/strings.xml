@@ -14,4 +14,6 @@
     <string name="ucrop_contrast" translatable="false">Contrast</string>
     <string name="ucrop_saturation" translatable="false">Saturation</string>
     <string name="ucrop_sharpness" translatable="false">Sharpness</string>
+    <string name="ucrop_done" translatable="false">Done</string>
+    <string name="ucrop_cancel" translatable="false">Cancel</string>
 </resources>

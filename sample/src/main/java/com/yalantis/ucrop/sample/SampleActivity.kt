@@ -52,7 +52,8 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
     private var settingsView: ScrollView? = null
     private val requestMode = BuildConfig.RequestMode
     private var fragment: UCropFragment? = null
-//    private var mShowLoader = false
+
+    //    private var mShowLoader = false
     private var mToolbarTitle: String? = null
 
     @DrawableRes
@@ -92,12 +93,12 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
             if (s.toString().trim { it <= ' ' }.isNotEmpty()) {
                 if (Integer.valueOf(s.toString()) < UCrop.MIN_SIZE) {
                     Toast.makeText(
-                        this@SampleActivity,
-                        String.format(
-                            getString(R.string.format_max_cropped_image_size),
-                            UCrop.MIN_SIZE
-                        ),
-                        Toast.LENGTH_SHORT
+                            this@SampleActivity,
+                            String.format(
+                                    getString(R.string.format_max_cropped_image_size),
+                                    UCrop.MIN_SIZE
+                            ),
+                            Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -111,11 +112,11 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
             val minSizePixels = 800
             val maxSizePixels = 2400
             val uri = Uri.parse(
-                String.format(
-                    Locale.getDefault(), "https://unsplash.it/%d/%d/?random",
-                    minSizePixels + random.nextInt(maxSizePixels - minSizePixels),
-                    minSizePixels + random.nextInt(maxSizePixels - minSizePixels)
-                )
+                    String.format(
+                            Locale.getDefault(), "https://unsplash.it/%d/%d/?random",
+                            minSizePixels + random.nextInt(maxSizePixels - minSizePixels),
+                            minSizePixels + random.nextInt(maxSizePixels - minSizePixels)
+                    )
             )
             startCrop(uri)
         }
@@ -136,7 +137,7 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
         mCheckBoxSaturation = findViewById(R.id.checkbox_saturation)
         mCheckBoxSharpness = findViewById(R.id.checkbox_sharpness)
         mRadioGroupTitlebarTextGravity =
-            findViewById(R.id.radio_group_titlebar_text_gravity_settings)
+                findViewById(R.id.radio_group_titlebar_text_gravity_settings)
         mEditTextTitlebarTextSize = findViewById(R.id.edit_text_toolbar_title_size)
         mRadioGroupAspectRatio!!.check(R.id.radio_dynamic)
         mEditTextRatioX!!.addTextChangedListener(mAspectRatioTextWatcher)
@@ -147,14 +148,14 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
         mRadioGroupCompressionSettings!!.check(R.id.radio_jpeg)
         mSeekBarQuality!!.progress = UCropActivity.DEFAULT_COMPRESS_QUALITY
         mTextViewQuality!!.text = String.format(
-            getString(R.string.format_quality_d),
-            mSeekBarQuality!!.progress
+                getString(R.string.format_quality_d),
+                mSeekBarQuality!!.progress
         )
         mSeekBarQuality!!.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 mTextViewQuality!!.text = String.format(
-                    getString(R.string.format_quality_d),
-                    progress
+                        getString(R.string.format_quality_d),
+                        progress
                 )
             }
 
@@ -173,9 +174,9 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
                 startCrop(selectedUri)
             } else {
                 Toast.makeText(
-                    this@SampleActivity,
-                    R.string.toast_cannot_retrieve_selected_image,
-                    Toast.LENGTH_SHORT
+                        this@SampleActivity,
+                        R.string.toast_cannot_retrieve_selected_image,
+                        Toast.LENGTH_SHORT
                 ).show()
             }
             return@registerForActivityResult
@@ -188,16 +189,15 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
 
     private fun pickFromGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
-            .setType("image/*")
-            .addCategory(Intent.CATEGORY_OPENABLE)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            val mimeTypes = arrayOf("image/jpeg", "image/png")
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
-        }
+                .setType("image/*")
+                .addCategory(Intent.CATEGORY_OPENABLE)
+        val mimeTypes = arrayOf("image/jpeg", "image/png")
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+
 
         activityResultLauncherGalleryPick.launch(Intent.createChooser(
-            intent,
-            getString(R.string.label_select_picture)
+                intent,
+                getString(R.string.label_select_picture)
         ))
     }
 
@@ -242,9 +242,9 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
             R.id.radio_dynamic -> {}
             else -> try {
                 val ratioX =
-                    java.lang.Float.valueOf(mEditTextRatioX!!.text.toString().trim { it <= ' ' })
+                        java.lang.Float.valueOf(mEditTextRatioX!!.text.toString().trim { it <= ' ' })
                 val ratioY =
-                    java.lang.Float.valueOf(mEditTextRatioY!!.text.toString().trim { it <= ' ' })
+                        java.lang.Float.valueOf(mEditTextRatioY!!.text.toString().trim { it <= ' ' })
                 if (ratioX > 0 && ratioY > 0) {
                     uCrop = uCrop.withAspectRatio(ratioX, ratioY)
                 }
@@ -255,9 +255,9 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
         if (mCheckBoxMaxSize!!.isChecked) {
             try {
                 val maxWidth =
-                    Integer.valueOf(mEditTextMaxWidth!!.text.toString().trim { it <= ' ' })
+                        Integer.valueOf(mEditTextMaxWidth!!.text.toString().trim { it <= ' ' })
                 val maxHeight =
-                    Integer.valueOf(mEditTextMaxHeight!!.text.toString().trim { it <= ' ' })
+                        Integer.valueOf(mEditTextMaxHeight!!.text.toString().trim { it <= ' ' })
                 if (maxWidth > UCrop.MIN_SIZE && maxHeight > UCrop.MIN_SIZE) {
                     uCrop = uCrop.withMaxResultSize(maxWidth, maxHeight)
                 }
@@ -288,7 +288,7 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
         options.setContrastEnabled(mCheckBoxContrast!!.isChecked)
         options.setSaturationEnabled(mCheckBoxSaturation!!.isChecked)
         options.setSharpnessEnabled(mCheckBoxSharpness!!.isChecked)
-        if (!mEditTextTitlebarTextSize!!.text.toString().isEmpty()) {
+        if (mEditTextTitlebarTextSize!!.text.toString().isNotEmpty()) {
             options.setToolbarTitleTextSize(mEditTextTitlebarTextSize!!.text.toString().toFloat())
         }
         when (mRadioGroupTitlebarTextGravity!!.checkedRadioButtonId) {
@@ -354,9 +354,9 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
             startWithUri(this@SampleActivity, resultUri)
         } else {
             Toast.makeText(
-                this@SampleActivity,
-                R.string.toast_cannot_retrieve_cropped_image,
-                Toast.LENGTH_SHORT
+                    this@SampleActivity,
+                    R.string.toast_cannot_retrieve_cropped_image,
+                    Toast.LENGTH_SHORT
             ).show()
         }
     }
@@ -368,7 +368,7 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
             Toast.makeText(this@SampleActivity, cropError.message, Toast.LENGTH_LONG).show()
         } else {
             Toast.makeText(this@SampleActivity, R.string.toast_unexpected_error, Toast.LENGTH_SHORT)
-                .show()
+                    .show()
         }
     }
 
@@ -380,8 +380,9 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
     override fun onCropFinish(result: UCropResult?) {
         when (Objects.requireNonNull(result)!!.mResultCode) {
             RESULT_OK -> handleCropResult(
-                result!!.mResultData
+                    result!!.mResultData
             )
+
             UCrop.RESULT_ERROR -> handleCropError(result!!.mResultData)
         }
         removeFragmentFromScreen()
@@ -389,41 +390,41 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
 
     fun removeFragmentFromScreen() {
         supportFragmentManager.beginTransaction()
-            .remove(fragment!!)
-            .commit()
+                .remove(fragment!!)
+                .commit()
         toolbar!!.visibility = View.GONE
         settingsView!!.visibility = View.VISIBLE
     }
 
-    fun setupFragment(uCrop: UCrop) {
+    private fun setupFragment(uCrop: UCrop) {
         fragment = uCrop.getFragment(uCrop.getIntent(this).extras!!)
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, fragment!!, UCropFragment.TAG)
-            .commitAllowingStateLoss()
+                .add(R.id.fragment_container, fragment!!, UCropFragment.TAG)
+                .commitAllowingStateLoss()
         setupViews(uCrop.getIntent(this).extras)
     }
 
-    fun setupViews(args: Bundle?) {
+    private fun setupViews(args: Bundle?) {
         settingsView!!.visibility = View.GONE
         mStatusBarColor = args!!.getInt(
-            UCrop.Options.EXTRA_STATUS_BAR_COLOR,
-            ContextCompat.getColor(this, R.color.ucrop_color_statusbar)
+                UCrop.Options.EXTRA_STATUS_BAR_COLOR,
+                ContextCompat.getColor(this, R.color.ucrop_color_statusbar)
         )
         mToolbarColor = args.getInt(
-            UCrop.Options.EXTRA_TOOL_BAR_COLOR,
-            ContextCompat.getColor(this, R.color.ucrop_color_toolbar)
+                UCrop.Options.EXTRA_TOOL_BAR_COLOR,
+                ContextCompat.getColor(this, R.color.ucrop_color_toolbar)
         )
         mToolbarCancelDrawable =
-            args.getInt(UCrop.Options.EXTRA_UCROP_WIDGET_CANCEL_DRAWABLE, R.drawable.ucrop_ic_cross)
+                args.getInt(UCrop.Options.EXTRA_UCROP_WIDGET_CANCEL_DRAWABLE, R.drawable.ucrop_ic_cross)
         mToolbarCropDrawable =
-            args.getInt(UCrop.Options.EXTRA_UCROP_WIDGET_CROP_DRAWABLE, R.drawable.ucrop_ic_done)
+                args.getInt(UCrop.Options.EXTRA_UCROP_WIDGET_CROP_DRAWABLE, R.drawable.ucrop_ic_done)
         mToolbarWidgetColor = args.getInt(
-            UCrop.Options.EXTRA_UCROP_WIDGET_COLOR_TOOLBAR,
-            ContextCompat.getColor(this, R.color.ucrop_color_toolbar_widget)
+                UCrop.Options.EXTRA_UCROP_WIDGET_COLOR_TOOLBAR,
+                ContextCompat.getColor(this, R.color.ucrop_color_toolbar_widget)
         )
         mToolbarTitle = args.getString(UCrop.Options.EXTRA_UCROP_TITLE_TEXT_TOOLBAR)
         mToolbarTitle =
-            if (mToolbarTitle != null) mToolbarTitle else resources.getString(R.string.ucrop_label_edit_photo)
+                if (mToolbarTitle != null) mToolbarTitle else resources.getString(R.string.ucrop_label_edit_photo)
         setupAppBar()
     }
 
@@ -454,24 +455,16 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
         actionBar?.setDisplayShowTitleEnabled(false)
     }
 
-    /**
-     * Sets status-bar color for L devices.
-     *
-     * @param color - status-bar color
-     */
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setStatusBarColor(@ColorInt color: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = window
-            if (window != null) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.statusBarColor = color
-            }
+        val window = window
+        if (window != null) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = color
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.ucrop_menu_activity, menu)
+//        menuInflater.inflate(R.menu.ucrop_menu_activity, menu)
 
         // Change crop & loader menu icons color to match the rest of the UI colors
 //        val menuItemLoader = menu.findItem(R.id.menu_loader)
@@ -493,30 +486,32 @@ class SampleActivity : BaseActivity(), UCropFragmentCallback {
 //            }
 //            (menuItemLoader.icon as Animatable?)!!.start()
 //        }
-        val menuItemCrop = menu.findItem(R.id.menu_crop)
-        val menuItemCropIcon = ContextCompat.getDrawable(
-            this,
-            if (mToolbarCropDrawable == 0) R.drawable.ucrop_ic_done else mToolbarCropDrawable
-        )
-        if (menuItemCropIcon != null) {
-            menuItemCropIcon.mutate()
-            menuItemCropIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP)
-            menuItemCrop.icon = menuItemCropIcon
-        }
+//        val menuItemCrop = menu.findItem(R.id.menu_crop)
+//        val menuItemCropIcon = ContextCompat.getDrawable(
+//                this,
+//                if (mToolbarCropDrawable == 0) R.drawable.ucrop_ic_done else mToolbarCropDrawable
+//        )
+//        if (menuItemCropIcon != null) {
+//            menuItemCropIcon.mutate()
+//            menuItemCropIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP)
+//            menuItemCrop.icon = menuItemCropIcon
+//        }
         return true
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.menu_crop).isVisible = true
+//        menu.findItem(R.id.menu_crop).isVisible = true
+
 //        menu.findItem(R.id.menu_crop).isVisible = !mShowLoader
 //        menu.findItem(R.id.menu_loader).isVisible = mShowLoader
         return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_crop) {
-            if (fragment != null && fragment!!.isAdded) fragment!!.cropAndSaveImage()
-        } else if (item.itemId == android.R.id.home) {
+//        if (item.itemId == R.id.menu_crop) {
+//            if (fragment != null && fragment!!.isAdded) fragment!!.cropAndSaveImage()
+//        } else
+        if (item.itemId == android.R.id.home) {
             removeFragmentFromScreen()
         }
         return super.onOptionsItemSelected(item)

@@ -73,14 +73,15 @@ class UCropActivity : AppCompatActivity() {
     @ColorInt
     private var mRootViewBackgroundColor = 0
 
-    @DrawableRes
-    private var mToolbarCancelDrawable = 0
+//    @DrawableRes
+//    private var mToolbarCancelDrawable = 0
 
-    @DrawableRes
-    private var mToolbarCropDrawable = 0
+//    @DrawableRes
+//    private var mToolbarCropDrawable = 0
     private var mLogoColor = 0
     private var mShowBottomControls = false
-//    private var mShowLoader = true
+
+    //    private var mShowLoader = true
     private var mUCropView: UCropView? = null
     private var mToolbarTextView: TextView? = null
     private var mToolbarView: Toolbar? = null
@@ -112,6 +113,8 @@ class UCropActivity : AppCompatActivity() {
     private var mCompressFormat = DEFAULT_COMPRESS_FORMAT
     private var mCompressQuality = DEFAULT_COMPRESS_QUALITY
     private var mAllowedGestures = intArrayOf(SCALE, ROTATE, ALL)
+    private var mTextViewDone: TextView? = null
+    private var mTextViewCancel: TextView? = null
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ucrop_activity_photobox)
@@ -120,78 +123,6 @@ class UCropActivity : AppCompatActivity() {
         setImageData(intent)
         setInitialState()
         addBlockingView()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.ucrop_menu_activity, menu)
-
-//        // Change crop & loader menu icons color to match the rest of the UI colors
-//        val menuItemLoader = menu.findItem(R.id.menu_loader)
-//        val menuItemLoaderIcon = menuItemLoader.icon
-//        if (menuItemLoaderIcon != null) {
-//            try {
-//                menuItemLoaderIcon.mutate()
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//                    menuItemLoaderIcon.colorFilter = BlendModeColorFilter(mToolbarWidgetColor, BlendMode.SRC_ATOP)
-//                } else {
-//                    @Suppress("DEPRECATION")
-//                    menuItemLoaderIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP)
-//                }
-//                menuItemLoader.icon = menuItemLoaderIcon
-//            } catch (e: IllegalStateException) {
-//                Log.i(
-//                        TAG,
-//                        String.format(
-//                                "%s - %s",
-//                                e.message,
-//                                getString(R.string.ucrop_mutate_exception_hint)
-//                        )
-//                )
-//            }
-//            (menuItemLoader.icon as Animatable?)?.start()
-//        }
-        val menuItemCrop = menu.findItem(R.id.menu_crop)
-        val menuItemCropIcon = ContextCompat.getDrawable(this, mToolbarCropDrawable)
-        if (menuItemCropIcon != null) {
-            try {
-                menuItemCropIcon.mutate()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    menuItemCropIcon.colorFilter = BlendModeColorFilter(mToolbarWidgetColor, BlendMode.SRC_ATOP)
-                } else {
-                    @Suppress("DEPRECATION")
-                    menuItemCropIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP)
-                }
-                menuItemCrop.icon = menuItemCropIcon
-            } catch (e: IllegalStateException) {
-                Log.i(
-                        TAG,
-                        String.format(
-                                "%s - %s",
-                                e.message,
-                                getString(R.string.ucrop_mutate_exception_hint)
-                        )
-                )
-            }
-        }
-        return true
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.menu_crop).isVisible = true
-//        menu.findItem(R.id.menu_crop).isVisible = !mShowLoader
-//        menu.findItem(R.id.menu_loader).isVisible = mShowLoader
-        return super.onPrepareOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_crop) {
-            cropAndSaveImage()
-            return true
-        } else if (item.itemId == android.R.id.home) {
-            onBackPressed()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onStop() {
@@ -412,14 +343,14 @@ class UCropActivity : AppCompatActivity() {
                 UCrop.Options.EXTRA_UCROP_WIDGET_COLOR_TOOLBAR,
                 ContextCompat.getColor(this, R.color.ucrop_color_toolbar_widget)
         )
-        mToolbarCancelDrawable = intent.getIntExtra(
-                UCrop.Options.EXTRA_UCROP_WIDGET_CANCEL_DRAWABLE,
-                R.drawable.ucrop_ic_cross
-        )
-        mToolbarCropDrawable = intent.getIntExtra(
-                UCrop.Options.EXTRA_UCROP_WIDGET_CROP_DRAWABLE,
-                R.drawable.ucrop_ic_done
-        )
+//        mToolbarCancelDrawable = intent.getIntExtra(
+//                UCrop.Options.EXTRA_UCROP_WIDGET_CANCEL_DRAWABLE,
+//                R.drawable.ucrop_ic_cross
+//        )
+//        mToolbarCropDrawable = intent.getIntExtra(
+//                UCrop.Options.EXTRA_UCROP_WIDGET_CROP_DRAWABLE,
+//                R.drawable.ucrop_ic_done
+//        )
         mToolbarTitle = intent.getStringExtra(UCrop.Options.EXTRA_UCROP_TITLE_TEXT_TOOLBAR)
         mToolbarTitle =
                 if (mToolbarTitle != null) mToolbarTitle else resources.getString(R.string.ucrop_label_edit_photo)
@@ -463,6 +394,12 @@ class UCropActivity : AppCompatActivity() {
             mLayoutContrastBar = findViewById(R.id.layout_contrast_bar)
             mLayoutSaturationBar = findViewById(R.id.layout_saturation_bar)
             mLayoutSharpnessBar = findViewById(R.id.layout_sharpness_bar)
+
+            mTextViewDone = findViewById(R.id.text_view_done)
+            mTextViewDone?.setOnClickListener { cropAndSaveImage() }
+            mTextViewCancel = findViewById(R.id.text_view_cancel)
+            mTextViewCancel?.setOnClickListener { onBackPressed() }
+
             setupAspectRatioWidget(intent)
             setupRotateWidget()
             setupScaleWidget()
@@ -500,9 +437,9 @@ class UCropActivity : AppCompatActivity() {
         mToolbarTextView?.layoutParams = lp
 
         // Color buttons inside the Toolbar
-        val stateButtonDrawable = ContextCompat.getDrawable(this, mToolbarCancelDrawable)?.mutate()
-        stateButtonDrawable?.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP)
-        mToolbarView?.navigationIcon = stateButtonDrawable
+//        val stateButtonDrawable = ContextCompat.getDrawable(this, mToolbarCancelDrawable)?.mutate()
+//        stateButtonDrawable?.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP)
+//        mToolbarView?.navigationIcon = stateButtonDrawable
         setSupportActionBar(mToolbarView)
         val actionBar = supportActionBar
         actionBar?.setDisplayShowTitleEnabled(false)
